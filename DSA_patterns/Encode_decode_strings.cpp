@@ -1,12 +1,11 @@
 #include <vector>
 #include <string>
 #include <iostream>
-using namespace std;
 
+using namespace std;
 // Encode & Decode Strings — NeetCode #6
 // Approach: length-prefix encoding — "word" -> "4#word"
 // Time: O(n)  Space: O(n)
-
 string encode(vector<string>& strs) {
     string result = "";
     for (auto& s : strs)
