@@ -59,7 +59,6 @@ int astar(vector<vector<int>>&grid, pair<int,int> start,pair<int,int> goal){
                 if(new_g<g[nr][nc]){
                     g[nr][nc] = new_g;
                     pq.push(make_tuple(new_g + heuristic(nr,nc,gr,gc), new_g, nr,nc));
-
                 }
             }
         }

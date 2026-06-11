@@ -17,7 +17,7 @@ public:
         for(char c : s) count[c]++; 
 
         for(char c : t) count[c]--;
-        for(auto& p : count) if(p.econd != 0) 
+        for(auto& p : count) if(p.second != 0) 
             return false;
          
             return true; 
