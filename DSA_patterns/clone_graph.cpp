@@ -3,57 +3,46 @@
 #include<unordered_map>
 using namespace std;
 
-class Node {
-public:
+class Node{
+    public:
     int val;
     vector<Node*> neighbors;
-    Node(int _val) : val(_val) {}
+    Node(int _val) : val(_val){}
 };
 
-// DFS + hashmap
-// hashmap does two jobs:
-// 1. visited check — don't recurse into a node twice (prevents infinite loop)
-// 2. clone registry — original→clone, so multiple nodes pointing to the same
-//    neighbor all get the same clone back (prevents duplicate nodes)
-// register the clone BEFORE recursing into neighbors — so back-edges find it
+// why DFS and not some random data structure? --> infinite loop if you revisit the same node
+// if node 1 and node 2 both have each other as neighbors , a plain DFS would create duplicate clones of the same node. you would end up with multiple copies of node 1 instead of one.
 
-Node* dfs(Node* node, unordered_map<Node*, Node*>& cloned) {
+
+//we use a hashmap here which does two jobs:
+
+// visited check - dont recurse into a node twice 
+// clone registry -original-> clone , so when multiple nodes point to the same neighbour , they all get the same clone back 
+
+
+
+//clone node:
+//if node in cloned --> return cloned[node]
+//create new node 
+//add to cloned 
+//for each neighbor --> recursively clone and add to new node's neighbors 
+//return new node 
+
+Node* dfs(Node* node ,unordered_map<Node*,Node*>& cloned){
     if(cloned.count(node)) return cloned[node];
-
     Node* copy = new Node(node->val);
     cloned[node] = copy;
-
-    for(Node* neighbor : node->neighbors)
-        copy->neighbors.push_back(dfs(neighbor, cloned));
-
+    //register before recursing -- so if a neighbor points back to this node , it finds it in the map instead of looping forever
+    for(Node* neighbor : node-> neighbors){
+        copy->neighbors.push_back(dfs(neighbor,cloned));
+        //this says: for every neighbor of the original , recursively clone it and add the clone to our copy's neighbor list.
+        
+    }
     return copy;
 }
 
-Node* clone_graph(Node* node) {
+Node* clone_graph(Node* node){
+    unordered_map<Node*,Node*> cloned;
     if(!node) return nullptr;
-    unordered_map<Node*, Node*> cloned;
-    return dfs(node, cloned);
-}
-
-int main() {
-    // Build: 1 -- 2
-    //        |    |
-    //        4 -- 3
-    Node* n1 = new Node(1);
-    Node* n2 = new Node(2);
-    Node* n3 = new Node(3);
-    Node* n4 = new Node(4);
-
-    n1->neighbors = {n2, n4};
-    n2->neighbors = {n1, n3};
-    n3->neighbors = {n2, n4};
-    n4->neighbors = {n1, n3};
-
-    Node* cloned_n1 = clone_graph(n1);
-
-    cout << "cloned val: " << cloned_n1->val << endl;
-    cout << "cloned neighbors: " << cloned_n1->neighbors.size() << endl;
-    cout << (n1 != cloned_n1 ? "PASS: different pointers" : "FAIL") << endl;
-
-    return 0;
+    return dfs(node,cloned);
 }
