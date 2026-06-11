@@ -53,7 +53,7 @@ int astar(vector<vector<int>>&grid, pair<int,int> start,pair<int,int> goal){
 
         for(auto& d:dirs){
             int nr = r + d[0] ,nc = c + d[1];
-            if(nr >= 0 && nr<ROWS && nc>=0 && nc<COLS && g[nr][nc] !=1){
+            if(nr >= 0 && nr<ROWS && nc>=0 && nc<COLS && grid[nr][nc] !=1){
                 int new_g = cost + 1;
 
                 if(new_g<g[nr][nc]){
