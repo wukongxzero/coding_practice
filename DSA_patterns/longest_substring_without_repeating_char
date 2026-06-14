@@ -1,0 +1,22 @@
+#include<string>
+#include<unordered_map>
+
+using namespace std;
+
+// Pattern: sliding window with last-seen index map
+// left pointer jumps past the duplicate when s[right] is inside the current window
+// >= left guard prevents moving left backwards (avoids shrinking window for old duplicates)
+int length_of_longest_substring(string s) {
+    int left = 0, count = 0;
+    unordered_map<char, int> last_seen;  // char -> last seen index
+
+    for (int right = 0; right < s.size(); right++) {
+        // duplicate found inside current window [left, right)
+        if (last_seen.count(s[right]) && last_seen[s[right]] >= left)
+            left = last_seen[s[right]] + 1;  // shrink: jump left past the old occurrence
+
+        last_seen[s[right]] = right;                   // always update to latest index
+        count = max(count, right - left + 1);          // window size = right - left + 1
+    }
+    return count;
+}
