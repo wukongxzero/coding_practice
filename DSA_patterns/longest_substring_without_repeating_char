@@ -4,7 +4,7 @@
 using namespace std;
 
 // Pattern: sliding window with last-seen index map
-// left pointer jumps past the duplicate when s[right] is inside the current window
+// left pointer jumps past the duplicate when s[right] is inside the currenat window
 // >= left guard prevents moving left backwards (avoids shrinking window for old duplicates)
 int length_of_longest_substring(string s) {
     int left = 0, count = 0;
